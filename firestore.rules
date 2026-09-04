@@ -1,0 +1,33 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper to check if user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Site Settings: Anyone can read, only Admin can write
+    match /settings/{settingId} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+
+    // Specialists: Anyone can read, only Admin can write
+    match /specialists/{specialistId} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+
+    // Insurances: Anyone can read, only Admin can write
+    match /insurances/{insuranceId} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+
+    // Articles: Anyone can read published articles, only Admin can write or read drafts
+    match /articles/{articleId} {
+      allow read: if resource.data.status == 'published' || isAuthenticated();
+      allow write: if isAuthenticated();
+    }
+  }
+}

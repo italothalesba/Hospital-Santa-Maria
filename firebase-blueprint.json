@@ -1,0 +1,81 @@
+{
+  "entities": {
+    "article": {
+      "title": "Blog Article",
+      "description": "A blog post or news article for the hospital website.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "maxLength": 200 },
+        "slug": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+        "content": { "type": "string" },
+        "excerpt": { "type": "string", "maxLength": 500 },
+        "coverImage": { "type": "string" },
+        "authorId": { "type": "string" },
+        "category": { "type": "string", "enum": ["Saúde", "Tecnologia", "Especialidades", "Institucional"] },
+        "status": { "type": "string", "enum": ["draft", "published"] },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "slug", "content", "status", "createdAt", "updatedAt"]
+    },
+    "setting": {
+      "title": "Site Settings",
+      "description": "Global configuration for the hospital website.",
+      "type": "object",
+      "properties": {
+        "logoUrl": { "type": "string" },
+        "whatsappNumber": { "type": "string" },
+        "whatsappFormatted": { "type": "string" },
+        "address": { "type": "string" },
+        "heroTitle": { "type": "string" },
+        "heroSubtitle": { "type": "string" },
+        "heroImage": { "type": "string" },
+        "contactEmail": { "type": "string" },
+        "yearsOfCredibility": { "type": "number" }
+      }
+    },
+    "specialist": {
+      "title": "Medical Specialist",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "role": { "type": "string" },
+        "description": { "type": "string" },
+        "image": { "type": "string" },
+        "crm": { "type": "string" },
+        "cremec": { "type": "string" },
+        "crn": { "type": "string" },
+        "order": { "type": "number" }
+      },
+      "required": ["name", "role", "image"]
+    },
+    "insurance": {
+      "title": "Insurance Partner",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string" },
+        "logoUrl": { "type": "string" },
+        "order": { "type": "number" }
+      },
+      "required": ["name", "logoUrl"]
+    }
+  },
+  "firestore": {
+    "/articles/{articleId}": {
+      "schema": "article",
+      "description": "Collection of blog posts."
+    },
+    "/specialists/{specialistId}": {
+      "schema": "specialist",
+      "description": "Collection of medical staff."
+    },
+    "/insurances/{insuranceId}": {
+      "schema": "insurance",
+      "description": "Collection of insurance partners."
+    },
+    "/settings/global": {
+      "schema": "setting",
+      "description": "Global website configuration."
+    }
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "name": "Hospital Santa Maria",
+  "description": "Hospital de alta complexidade no Cariri cearense com emergência 24h, UTI tecnológica e especialistas em ortopedia, vascular e cirurgias minimamente invasivas.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
