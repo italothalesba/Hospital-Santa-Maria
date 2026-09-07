@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'motion/react';
-import { HOSPITAL_DATA } from '../data';
+import { HOSPITAL_DATA, DEFAULT_INSURANCES } from '../data';
 import { Phone, CheckCircle2, ArrowRight, Activity, Clock, ShieldCheck, MapPin, Microscope } from 'lucide-react';
 import ProfessionalCarousel from '../components/ProfessionalCarousel';
 import { db } from '../lib/firebase';
@@ -210,15 +210,30 @@ export default function LandingPage() {
           <div className="flex flex-wrap justify-center items-center gap-12 lg:gap-20">
             {insurances.length > 0 ? insurances.map((insurance) => (
               <div key={insurance.id} className="flex items-center justify-center max-w-[120px]">
-                <img 
-                  src={getGoogleDriveDirectLink(insurance.logoUrl)} 
-                  alt={insurance.name}
-                  className="max-h-12 w-auto grayscale opacity-40 hover:grayscale-0 hover:opacity-100 transition-all duration-300"
-                  referrerPolicy="no-referrer"
-                />
+                {insurance.logoUrl ? (
+                  <img 
+                    src={getGoogleDriveDirectLink(insurance.logoUrl)} 
+                    alt={insurance.name}
+                    className="max-h-12 w-auto grayscale opacity-40 hover:grayscale-0 hover:opacity-100 transition-all duration-300"
+                    referrerPolicy="no-referrer"
+                  />
+                ) : (
+                  <span className="text-xl font-black text-neutral-300 select-none">{insurance.name}</span>
+                )}
               </div>
-            )) : HOSPITAL_DATA.plans.map((plan, idx) => (
-              <span key={idx} className="text-xl font-black text-neutral-300 select-none">{plan}</span>
+            )) : DEFAULT_INSURANCES.map((insurance) => (
+              <div key={insurance.id} className="flex items-center justify-center max-w-[120px]">
+                {insurance.logoUrl ? (
+                  <img 
+                    src={getGoogleDriveDirectLink(insurance.logoUrl)} 
+                    alt={insurance.name}
+                    className="max-h-12 w-auto grayscale opacity-40 hover:grayscale-0 hover:opacity-100 transition-all duration-300"
+                    referrerPolicy="no-referrer"
+                  />
+                ) : (
+                  <span className="text-xl font-black text-neutral-300 select-none">{insurance.name}</span>
+                )}
+              </div>
             ))}
           </div>
         </div>

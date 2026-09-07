@@ -4,6 +4,7 @@ import { db } from '../lib/firebase';
 import { Insurance } from '../types';
 import { Plus, Edit2, Trash2, X, Save, ShieldCheck } from 'lucide-react';
 import { getGoogleDriveDirectLink } from '../lib/utils';
+import { DEFAULT_INSURANCES } from '../data';
 
 export default function AdminInsurances() {
   const [insurances, setInsurances] = useState<Insurance[]>([]);
@@ -17,9 +18,22 @@ export default function AdminInsurances() {
 
   const fetchInsurances = async () => {
     setLoading(true);
-    const q = query(collection(db, 'insurances'), orderBy('order', 'asc'));
-    const snapshot = await getDocs(q);
-    setInsurances(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Insurance)));
+    try {
+      const q = query(collection(db, 'insurances'), orderBy('order', 'asc'));
+      const snapshot = await getDocs(q);
+      const firestoreInsurances = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Insurance));
+
+      // Se o Firestore estiver vazio, usa os dados locais (mesmo comportamento da landing page)
+      if (firestoreInsurances.length === 0) {
+        setInsurances(DEFAULT_INSURANCES);
+      } else {
+        setInsurances(firestoreInsurances);
+      }
+    } catch (err) {
+      console.error('Error fetching insurances:', err);
+      // Fall back to local data on error
+      setInsurances(DEFAULT_INSURANCES);
+    }
     setLoading(false);
   };
 
@@ -33,10 +47,12 @@ export default function AdminInsurances() {
     };
 
     try {
-      if (currentInsurance.id) {
+      // Itens locais (id começa com "local-") ainda não existem no Firestore -> criar novo
+      if (currentInsurance.id && !currentInsurance.id.startsWith('local-')) {
         await updateDoc(doc(db, 'insurances', currentInsurance.id), insuranceData);
       } else {
-        await addDoc(collection(db, 'insurances'), insuranceData);
+        const { id, ...cleanData } = insuranceData as any;
+        await addDoc(collection(db, 'insurances'), cleanData);
       }
       setIsEditing(false);
       fetchInsurances();
@@ -47,6 +63,12 @@ export default function AdminInsurances() {
   };
 
   const handleDelete = async (id: string) => {
+    // Itens do backup local não podem ser excluídos do Firestore
+    if (id.startsWith('local-')) {
+      alert('Este convênio é do backup local. Salve-o no banco de dados para poder editá-lo e excluí-lo.');
+      return;
+    }
+
     if (confirm('Deseja realmente excluir este convênio?')) {
       await deleteDoc(doc(db, 'insurances', id));
       fetchInsurances();
@@ -82,43 +104,66 @@ export default function AdminInsurances() {
             </tr>
           </thead>
           <tbody className="divide-y divide-neutral-100">
-            {insurances.map((insurance) => (
-              <tr key={insurance.id} className="hover:bg-neutral-50/50 transition-colors group">
-                <td className="px-8 py-5">
-                  <div className="w-16 h-10 bg-neutral-100 rounded-lg overflow-hidden flex items-center justify-center p-2">
-                    <img 
-                      src={getGoogleDriveDirectLink(insurance.logoUrl)} 
-                      alt={insurance.name}
-                      className="w-full h-full object-contain grayscale group-hover:grayscale-0 transition-all"
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).src = 'https://via.placeholder.com/100x50?text=Logo';
-                      }}
-                    />
-                  </div>
-                </td>
-                <td className="px-8 py-5 text-sm font-bold text-neutral-900">{insurance.name}</td>
-                <td className="px-8 py-5 text-sm text-neutral-500">{insurance.order}</td>
-                <td className="px-8 py-5 text-right">
-                  <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                    <button 
-                      onClick={() => {
-                        setCurrentInsurance(insurance);
-                        setIsEditing(true);
-                      }}
-                      className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                    >
-                      <Edit2 className="w-4 h-4" />
-                    </button>
-                    <button 
-                      onClick={() => insurance.id && handleDelete(insurance.id)}
-                      className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </button>
+            {loading ? (
+              <tr>
+                <td colSpan={4} className="px-8 py-16 text-center">
+                  <div className="flex flex-col items-center gap-4">
+                    <div className="w-10 h-10 border-4 border-blue-600 border-t-transparent rounded-full animate-spin" />
+                    <p className="text-neutral-500 text-sm font-bold">Carregando convenios...</p>
                   </div>
                 </td>
               </tr>
-            ))}
+            ) : insurances.length === 0 ? (
+              <tr>
+                <td colSpan={4} className="px-8 py-16 text-center">
+                  <div className="flex flex-col items-center gap-4">
+                    <ShieldCheck className="w-12 h-12 text-neutral-300" />
+                    <p className="text-lg font-bold text-neutral-700">Não há convenios registrados</p>
+                    <p className="text-neutral-500 text-sm max-w-md text-center">
+                      Clique em <span className="font-bold text-blue-600">"Novo Convenio"</span> para adicionar o primeiro plano de saúde ou parceiro.
+                    </p>
+                  </div>
+                </td>
+              </tr>
+            ) : (
+              insurances.map((insurance) => (
+                <tr key={insurance.id} className="hover:bg-neutral-50/50 transition-colors group">
+                  <td className="px-8 py-5">
+                    <div className="w-16 h-10 bg-neutral-100 rounded-lg overflow-hidden flex items-center justify-center p-2">
+                      <img 
+                        src={getGoogleDriveDirectLink(insurance.logoUrl)} 
+                        alt={insurance.name}
+                        className="w-full h-full object-contain grayscale group-hover:grayscale-0 transition-all"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).src = 'https://via.placeholder.com/100x50?text=Logo';
+                        }}
+                      />
+                    </div>
+                  </td>
+                  <td className="px-8 py-5 text-sm font-bold text-neutral-900">{insurance.name}</td>
+                  <td className="px-8 py-5 text-sm text-neutral-500">{insurance.order}</td>
+                  <td className="px-8 py-5 text-right">
+                    <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <button 
+                        onClick={() => {
+                          setCurrentInsurance(insurance);
+                          setIsEditing(true);
+                        }}
+                        className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                      >
+                        <Edit2 className="w-4 h-4" />
+                      </button>
+                      <button 
+                        onClick={() => insurance.id && handleDelete(insurance.id)}
+                        className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))
+            )}
           </tbody>
         </table>
       </div>

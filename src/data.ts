@@ -1,3 +1,5 @@
+import { Insurance } from './types';
+
 export const HOSPITAL_DATA = {
   name: "Hospital Santa Maria",
   logoUrl: "https://drive.google.com/file/d/1ZmBqUD9eARkqgO7FMnHtN3KhTiYIRBag/view?usp=sharing",
@@ -23,77 +25,77 @@ export const HOSPITAL_DATA = {
       crm: "4560 | RQE 17151 / 17152",
       role: "Cirurgia Geral e do Aparelho Digestivo",
       description: "Videolaparoscopia. Membro Titular do CBC e CBCD.",
-      image: "https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&q=80&w=1140&h=1800"
+      image: "/especialistas/dr-eduardo.jpg"
     },
     {
       name: "Dr. Eleazar",
       crm: "8000 | RQE 12229",
       role: "Urologista",
       description: "Médico pela UFPE. Título de Especialista pela SBU.",
-      image: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&q=80&w=1140&h=1800"
+      image: "/especialistas/dr-eleazar.jpg"
     },
     {
       name: "Dra. Mikaíle Alcântara",
       crn: "9869",
       role: "Nutricionista Clínica e Hospitalar",
       description: "Pós em Nutrição Clínica e Esportiva.",
-      image: "https://images.unsplash.com/photo-1594824476967-48c8b964273f?auto=format&fit=crop&q=80&w=1140&h=1800"
+      image: "/especialistas/dra-mikaile.jpg"
     },
     {
       name: "Dr. Diego Araújo",
       cremec: "15772",
       role: "Clínico Geral e Endoscopia",
       description: "Especialização em Endoscopia pela SERVIDDA - RS.",
-      image: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&q=80&w=1140&h=1800"
+      image: "/especialistas/dr-diego.jpg"
     },
     {
       name: "Dr. Márcio Araújo",
       crm: "7288 | RQE 2547",
       role: "Cirurgião Vascular e Endovascular",
       description: "Coordenador de Cirurgia Vascular do HRC. Doppler Colorido Vascular.",
-      image: "https://images.unsplash.com/photo-1559839734-2b71f15367ef?auto=format&fit=crop&q=80&w=1140&h=1800"
+      image: "/especialistas/dr-marcio.jpg"
     },
     {
       name: "Dr. Samir",
       crm: "16346 | RQE 7192",
       role: "Ortopedista",
       description: "Membro da SBOT e SBTO. Especialista pela FAMEMA - SP.",
-      image: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&q=80&w=1140&h=1800"
+      image: "/especialistas/dr-samir.jpg"
     },
     {
       name: "Dr. Edilson Lopes",
       crm: "CE 24964",
       role: "Ortopedia e Traumatologia",
       description: "Residência no Hospital da Restauração. Lesões Esportivas.",
-      image: "https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&q=80&w=1140&h=1800"
+      image: "/especialistas/dr-edilson.jpg"
     },
     {
       name: "Dr. Raynio Markfá",
       crm: "22132 | RQE 15539",
       role: "Ortopedia e Traumatologia",
       description: "Especialista em Joelho. Membro Titular da SBOT.",
-      image: "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&q=80&w=1140&h=1800"
+      image: "/especialistas/dr-raynio.jpg"
     },
     {
       name: "Dr. Alison Nascimento",
       crm: "23032",
       role: "Ultrassonografia",
       description: "Médico Ultrassonografista pela ECUS. Musculoesquelética e Vascular.",
-      image: "https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&q=80&w=1140&h=1800"
+      image: "/especialistas/dr-alison.jpg"
     },
     {
       name: "Dr. Welber Meneses",
       crm: "17.092 | RQE 9002",
       role: "Especialista em Coluna",
       description: "Ortopedista e Traumatologista. Cirurgia de Endoscopia da Coluna.",
-      image: "https://images.unsplash.com/photo-1559839734-2b71f15367ef?auto=format&fit=crop&q=80&w=1140&h=1800"
+      image: "/especialistas/dr-welber.jpg"
     },
     {
       name: "Dra. Telma Rocha",
       crm: "8968 | RQE 2057",
       role: "Cirurgia Plástica",
       description: "Mamoplastia, Dermoplastia e Plástica em geral.",
-      image: "https://images.unsplash.com/photo-1594824476967-48c8b964273f?auto=format&fit=crop&q=80&w=1140&h=1800"
+      image: "/especialistas/dra-telma.jpg"
     },
     {
       name: "Especialista em Diagnóstico",
@@ -106,6 +108,36 @@ export const HOSPITAL_DATA = {
       role: "Equipe Clínica",
       description: "Nossa equipe está pronta para acolher você e sua família com carinho e dedicação.",
       image: "https://drive.google.com/file/d/1Nm6ytkXoofweIdlHRwxQf-ARm_IYuR9s/view?usp=sharing"
+    },
+    {
+      name: "Dr. Cícero Job",
+      role: "Especialista",
+      description: "",
+      image: "/especialistas/dr-cicero-job.jpg"
     }
   ]
 };
+
+// Mapeia cada convênio (nome) para o caminho local da sua logo em /public/convenios
+export const PLAN_LOGOS: Record<string, string> = {
+  "ISSEC": "/convenios/ISSEC.jpg",
+  "Camed": "/convenios/CAMED.png",
+  "Life": "/convenios/life.png",
+  "Capesaúde": "/convenios/Capesaude.png",
+  "GEAP Saúde": "/convenios/geapsaude.png",
+  "Saúde CAIXA": "/convenios/CAIXA.png",
+  "Bradesco Saúde": "/convenios/bradesco-saude.png",
+  "Amil": "/convenios/amil.png",
+  "Famed Saúde": "/convenios/famed.png",
+  "Vitallis": "/convenios/vitallis.png",
+  "CASSI": "/convenios/cassi-seeklogo.png",
+  "Fachesf Saúde": "/convenios/fachesf.png",
+  "SulAmérica Saúde": "/convenios/SulAmerica.png"
+};
+
+export const DEFAULT_INSURANCES: Insurance[] = HOSPITAL_DATA.plans.map((name, idx) => ({
+  id: `local-${idx}`,
+  name,
+  logoUrl: PLAN_LOGOS[name] || '',
+  order: idx + 1,
+}));

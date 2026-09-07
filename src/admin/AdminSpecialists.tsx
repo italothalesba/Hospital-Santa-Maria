@@ -2,8 +2,9 @@ import { useState, useEffect } from 'react';
 import { collection, addDoc, updateDoc, deleteDoc, doc, getDocs, orderBy, query } from 'firebase/firestore';
 import { db } from '../lib/firebase';
 import { Specialist } from '../types';
-import { Plus, Search, Edit2, Trash2, X, Save, User } from 'lucide-react';
+import { Plus, Search, Edit2, Trash2, X, Save, User, Database } from 'lucide-react';
 import { getGoogleDriveDirectLink } from '../lib/utils';
+import { HOSPITAL_DATA } from '../data';
 
 export default function AdminSpecialists() {
   const [specialists, setSpecialists] = useState<Specialist[]>([]);
@@ -17,10 +18,58 @@ export default function AdminSpecialists() {
 
   const fetchSpecialists = async () => {
     setLoading(true);
-    const q = query(collection(db, 'specialists'), orderBy('order', 'asc'));
-    const snapshot = await getDocs(q);
-    setSpecialists(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Specialist)));
+    try {
+      const q = query(collection(db, 'specialists'), orderBy('order', 'asc'));
+      const snapshot = await getDocs(q);
+      const firestoreSpecs = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Specialist));
+      
+      // If Firestore is empty, fall back to local data
+      if (firestoreSpecs.length === 0) {
+        setSpecialists(HOSPITAL_DATA.specialists.map((spec, idx) => ({ ...spec, id: `local-${idx}` })));
+      } else {
+        setSpecialists(firestoreSpecs);
+      }
+    } catch (err) {
+      console.error('Error fetching specialists:', err);
+      // Fall back to local data on error
+      setSpecialists(HOSPITAL_DATA.specialists.map((spec, idx) => ({ ...spec, id: `local-${idx}` })));
+    }
     setLoading(false);
+  };
+
+  const importLocalSpecialists = async () => {
+    if (!confirm('Deseja importar todos os especialistas locais para o banco de dados? Eles ficarão disponíveis no admin.')) return;
+    setLoading(true);
+    try {
+      // Check which specialists already exist in Firestore
+      const q = query(collection(db, 'specialists'), orderBy('order', 'asc'));
+      const snapshot = await getDocs(q);
+      const existingNames = new Set(snapshot.docs.map(d => d.data().name));
+
+      let imported = 0;
+      for (let i = 0; i < HOSPITAL_DATA.specialists.length; i++) {
+        const spec = HOSPITAL_DATA.specialists[i];
+        if (!existingNames.has(spec.name)) {
+          await addDoc(collection(db, 'specialists'), {
+            ...spec,
+            order: i + 1,
+          });
+          imported++;
+        }
+      }
+
+      if (imported > 0) {
+        alert(`${imported} especialista(s) importado(s) com sucesso!`);
+      } else {
+        alert('Todos os especialistas já estão no banco de dados.');
+      }
+      fetchSpecialists();
+    } catch (err) {
+      console.error('Erro ao importar especialistas:', err);
+      alert('Erro ao importar especialistas.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleSave = async (e: React.FormEvent) => {
@@ -33,10 +82,12 @@ export default function AdminSpecialists() {
     };
 
     try {
-      if (currentSpecialist.id) {
+      // If it's a local fallback specialist (id starts with "local-"), create a new one in Firestore
+      if (currentSpecialist.id && !currentSpecialist.id.startsWith('local-')) {
         await updateDoc(doc(db, 'specialists', currentSpecialist.id), specialistData);
       } else {
-        await addDoc(collection(db, 'specialists'), specialistData);
+        const { id, ...cleanData } = specialistData as any;
+        await addDoc(collection(db, 'specialists'), cleanData);
       }
       setIsEditing(false);
       fetchSpecialists();
@@ -47,9 +98,20 @@ export default function AdminSpecialists() {
   };
 
   const handleDelete = async (id: string) => {
-    if (confirm('Deseja realmente excluir este especialista?')) {
+    if (!confirm('Deseja realmente excluir este especialista?')) return;
+    
+    // Local fallback specialists can't be deleted from Firestore
+    if (id.startsWith('local-')) {
+      alert('Este especialista é do backup local. Importe os especialistas para o banco de dados para poder editá-los e excluí-los.');
+      return;
+    }
+
+    try {
       await deleteDoc(doc(db, 'specialists', id));
       fetchSpecialists();
+    } catch (err) {
+      console.error(err);
+      alert('Erro ao excluir especialista.');
     }
   };
 
@@ -60,15 +122,24 @@ export default function AdminSpecialists() {
           <h1 className="text-3xl font-bold text-neutral-900">Corpo Clínico</h1>
           <p className="text-neutral-500 mt-1">Gerencie os médicos e profissionais do hospital.</p>
         </div>
-        <button 
-          onClick={() => {
-            setCurrentSpecialist({ order: specialists.length + 1 });
-            setIsEditing(true);
-          }}
-          className="bg-blue-600 text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 hover:bg-blue-700 transition-all shadow-lg shadow-blue-100"
-        >
-          <Plus className="w-5 h-5" /> Novo Especialista
-        </button>
+        <div className="flex gap-3">
+          <button 
+            onClick={importLocalSpecialists}
+            disabled={loading}
+            className="bg-emerald-600 text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-100 disabled:opacity-50"
+          >
+            <Database className="w-5 h-5" /> Importar do Backup
+          </button>
+          <button 
+            onClick={() => {
+              setCurrentSpecialist({ order: specialists.length + 1 });
+              setIsEditing(true);
+            }}
+            className="bg-blue-600 text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 hover:bg-blue-700 transition-all shadow-lg shadow-blue-100"
+          >
+            <Plus className="w-5 h-5" /> Novo Especialista
+          </button>
+        </div>
       </div>
 
       <div className="bg-white rounded-3xl border border-neutral-200 overflow-hidden">
