@@ -63,20 +63,20 @@ export default function AdminDashboard() {
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold text-neutral-900">Visão Geral</h1>
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-8">
+        <h1 className="text-2xl sm:text-3xl font-bold text-neutral-900">Visão Geral</h1>
         <button 
           onClick={seedNewSpecialists}
           disabled={seeding}
-          className="bg-emerald-600 text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-100 disabled:opacity-50"
+          className="bg-emerald-600 text-white px-6 py-3 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-emerald-700 transition-all shadow-lg shadow-emerald-100 disabled:opacity-50 w-full sm:w-auto"
         >
           <Sparkles className="w-5 h-5" /> Importar Novos Especialistas
         </button>
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
         {cards.map((card, idx) => (
-          <div key={idx} className="bg-white p-8 rounded-3xl border border-neutral-100 shadow-sm">
+          <div key={idx} className="bg-white p-6 sm:p-8 rounded-3xl border border-neutral-100 shadow-sm">
             <div className={`w-12 h-12 ${card.bg} ${card.color} rounded-xl flex items-center justify-center mb-6`}>
               <card.icon className="w-6 h-6" />
             </div>
@@ -87,16 +87,16 @@ export default function AdminDashboard() {
       </div>
 
       <div className="grid lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2 bg-white rounded-3xl border border-neutral-100 p-8 shadow-sm">
+        <div className="lg:col-span-2 bg-white rounded-3xl border border-neutral-100 p-6 sm:p-8 shadow-sm">
           <h2 className="text-xl font-bold text-neutral-900 mb-6">Artigos Recentes</h2>
           <div className="space-y-6">
             {recentArticles.length > 0 ? recentArticles.map((article) => (
-              <div key={article.id} className="flex items-center justify-between py-4 border-b border-neutral-50 last:border-0">
-                <div>
-                  <h4 className="font-bold text-neutral-900">{article.title}</h4>
+              <div key={article.id} className="flex items-center justify-between gap-3 py-4 border-b border-neutral-50 last:border-0">
+                <div className="min-w-0">
+                  <h4 className="font-bold text-neutral-900 truncate">{article.title}</h4>
                   <p className="text-xs text-neutral-500 mt-1">Postado em {formatDate(article.createdAt)}</p>
                 </div>
-                <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase ${
+                <span className={`px-3 py-1 rounded-full text-[10px] font-black uppercase shrink-0 ${
                   article.status === 'published' ? 'bg-green-100 text-green-700' : 'bg-neutral-100 text-neutral-500'
                 }`}>
                   {article.status === 'published' ? 'Publicado' : 'Rascunho'}
@@ -108,7 +108,7 @@ export default function AdminDashboard() {
           </div>
         </div>
 
-        <div className="bg-blue-600 rounded-3xl p-8 text-white shadow-xl shadow-blue-100 flex flex-col justify-between">
+        <div className="bg-blue-600 rounded-3xl p-6 sm:p-8 text-white shadow-xl shadow-blue-100 flex flex-col justify-between">
           <div>
             <h2 className="text-xl font-bold mb-4">Dica de SEO</h2>
             <p className="text-blue-100 text-sm leading-relaxed">

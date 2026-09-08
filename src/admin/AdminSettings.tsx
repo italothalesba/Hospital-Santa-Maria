@@ -49,13 +49,13 @@ export default function AdminSettings() {
 
   return (
     <div className="max-w-4xl">
-      <div className="mb-12">
-        <h1 className="text-3xl font-bold text-neutral-900">Configurações do Site</h1>
+      <div className="mb-8 sm:mb-12">
+        <h1 className="text-2xl sm:text-3xl font-bold text-neutral-900">Configurações do Site</h1>
         <p className="text-neutral-500 mt-1">Gerencie a identidade visual e contatos do hospital.</p>
       </div>
 
       <form onSubmit={handleSave} className="space-y-8">
-        <div className="bg-white rounded-[32px] border border-neutral-200 p-10 shadow-sm space-y-8">
+        <div className="bg-white rounded-[32px] border border-neutral-200 p-6 sm:p-10 shadow-sm space-y-8">
           <h2 className="text-xl font-bold text-neutral-900 border-b border-neutral-100 pb-4">Identidade & Banners</h2>
           
           <div className="grid md:grid-cols-2 gap-8">
@@ -116,7 +116,7 @@ export default function AdminSettings() {
           </div>
         </div>
 
-        <div className="bg-white rounded-[32px] border border-neutral-200 p-10 shadow-sm space-y-8">
+        <div className="bg-white rounded-[32px] border border-neutral-200 p-6 sm:p-10 shadow-sm space-y-8">
           <h2 className="text-xl font-bold text-neutral-900 border-b border-neutral-100 pb-4">Contatos & Localização</h2>
           
           <div className="grid md:grid-cols-2 gap-8">
@@ -174,9 +174,9 @@ export default function AdminSettings() {
         <div className="flex justify-end">
           <button 
             disabled={saving}
-            className="bg-blue-600 text-white px-12 py-5 rounded-2xl font-black text-lg hover:bg-blue-700 transition-all shadow-xl shadow-blue-100 disabled:opacity-50 flex items-center gap-3"
+            className="bg-blue-600 text-white px-8 sm:px-12 py-4 sm:py-5 rounded-2xl font-black text-base sm:text-lg hover:bg-blue-700 transition-all shadow-xl shadow-blue-100 disabled:opacity-50 flex items-center justify-center gap-3 w-full sm:w-auto"
           >
-            <Save className="w-6 h-6" /> {saving ? 'Salvando...' : 'Salvar Alterações'}
+            <Save className="w-5 h-5 sm:w-6 sm:h-6" /> {saving ? 'Salvando...' : 'Salvar Alterações'}
           </button>
         </div>
       </form>

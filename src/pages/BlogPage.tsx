@@ -31,10 +31,10 @@ export default function BlogPage() {
   }, []);
 
   return (
-    <div className="py-20 bg-neutral-50 min-h-screen">
+    <div className="py-12 sm:py-20 bg-neutral-50 min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <header className="mb-16 text-center">
-          <h1 className="text-4xl font-bold text-neutral-900 mb-4">Blog Hospital Santa Maria</h1>
+        <header className="mb-10 sm:mb-16 text-center">
+          <h1 className="text-3xl sm:text-4xl font-bold text-neutral-900 mb-4">Blog Hospital Santa Maria</h1>
           <p className="text-neutral-600 max-w-2xl mx-auto">
             Dicas de saúde, novidades tecnológicas e informações para o bem-estar da sua família no Cariri.
           </p>
@@ -45,7 +45,7 @@ export default function BlogPage() {
             <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-600"></div>
           </div>
         ) : articles.length > 0 ? (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
             {articles.map((article) => (
               <article key={article.id} className="bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all border border-neutral-100 flex flex-col">
                 <div className="aspect-video bg-neutral-200">
@@ -53,7 +53,7 @@ export default function BlogPage() {
                     <img src={article.coverImage} alt={article.title} className="w-full h-full object-cover" />
                   )}
                 </div>
-                <div className="p-8 flex flex-col flex-1">
+                <div className="p-6 sm:p-8 flex flex-col flex-1">
                   <div className="flex items-center gap-4 text-xs font-bold text-blue-600 uppercase mb-4">
                     <span>{article.category}</span>
                   </div>

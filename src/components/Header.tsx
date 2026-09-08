@@ -43,7 +43,7 @@ export default function Header() {
             <img 
               src={getGoogleDriveDirectLink(settings.logoUrl)} 
               alt={HOSPITAL_DATA.name} 
-              className="h-12 w-auto object-contain"
+              className="h-10 sm:h-12 w-auto object-contain"
               referrerPolicy="no-referrer"
               onError={(e) => {
                 (e.target as HTMLImageElement).src = '/logo.png';
@@ -52,10 +52,10 @@ export default function Header() {
           </Link>
 
           <nav className="hidden md:flex items-center gap-8">
-            <Link to="/" className="text-sm font-medium text-neutral-600 hover:text-blue-600 transition-colors">Início</Link>
-            <a href="#especialidades" className="text-sm font-medium text-neutral-600 hover:text-blue-600 transition-colors">Especialidades</a>
-            <a href="#estrutura" className="text-sm font-medium text-neutral-600 hover:text-blue-600 transition-colors">Estrutura</a>
-            <Link to="/blog" className="text-sm font-medium text-neutral-600 hover:text-blue-600 transition-colors">Blog</Link>
+            <Link to="/" className="relative text-sm font-semibold text-neutral-600 hover:text-blue-600 transition-colors after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:w-0 after:rounded-full after:bg-blue-600 after:transition-all after:duration-300 hover:after:w-full">Início</Link>
+            <a href="#especialidades" className="relative text-sm font-semibold text-neutral-600 hover:text-blue-600 transition-colors after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:w-0 after:rounded-full after:bg-blue-600 after:transition-all after:duration-300 hover:after:w-full">Especialidades</a>
+            <a href="#estrutura" className="relative text-sm font-semibold text-neutral-600 hover:text-blue-600 transition-colors after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:w-0 after:rounded-full after:bg-blue-600 after:transition-all after:duration-300 hover:after:w-full">Estrutura</a>
+            <Link to="/blog" className="relative text-sm font-semibold text-neutral-600 hover:text-blue-600 transition-colors after:absolute after:left-0 after:-bottom-1 after:h-0.5 after:w-0 after:rounded-full after:bg-blue-600 after:transition-all after:duration-300 hover:after:w-full">Blog</Link>
             <a 
               href={`https://wa.me/${settings.whatsappNumber}`}
               className="bg-blue-600 text-white px-5 py-2.5 rounded-full text-sm font-semibold flex items-center gap-2 hover:bg-blue-700 transition-all shadow-lg shadow-blue-200"
@@ -65,25 +65,39 @@ export default function Header() {
             </a>
           </nav>
 
-          <button className="md:hidden" onClick={() => setIsOpen(!isOpen)}>
-            {isOpen ? <X /> : <Menu />}
-          </button>
+          <div className="flex items-center gap-2">
+            <a 
+              href={`https://wa.me/${settings.whatsappNumber}`}
+              className="md:hidden bg-blue-600 text-white p-2.5 rounded-full flex items-center justify-center hover:bg-blue-700 transition-all shadow-lg shadow-blue-200"
+              aria-label="Agendar via WhatsApp"
+            >
+              <Phone className="w-5 h-5" />
+            </a>
+            <button 
+              className="md:hidden p-2 -mr-2 rounded-lg text-neutral-700 hover:bg-neutral-100 transition-colors"
+              onClick={() => setIsOpen(!isOpen)}
+              aria-label={isOpen ? 'Fechar menu' : 'Abrir menu'}
+              aria-expanded={isOpen}
+            >
+              {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
+          </div>
         </div>
       </div>
 
       {/* Mobile Menu */}
       <div className={cn(
-        "md:hidden absolute w-full bg-white border-b transition-all duration-300 overflow-hidden",
-        isOpen ? "max-h-96 py-6" : "max-h-0"
+        "md:hidden absolute w-full bg-white border-b shadow-xl transition-all duration-300 overflow-hidden",
+        isOpen ? "max-h-[80vh] overflow-y-auto py-4" : "max-h-0"
       )}>
-        <div className="px-4 flex flex-col gap-4">
-          <Link to="/" onClick={() => setIsOpen(false)} className="text-lg font-medium">Início</Link>
-          <a href="#especialidades" onClick={() => setIsOpen(false)} className="text-lg font-medium">Especialidades</a>
-          <a href="#estrutura" onClick={() => setIsOpen(false)} className="text-lg font-medium">Estrutura</a>
-          <Link to="/blog" onClick={() => setIsOpen(false)} className="text-lg font-medium">Blog</Link>
+        <div className="px-4 flex flex-col gap-3">
+          <Link to="/" onClick={() => setIsOpen(false)} className="py-3 px-4 rounded-xl text-lg font-semibold text-neutral-800 hover:bg-neutral-50 hover:text-blue-600 transition-colors">Início</Link>
+          <a href="#especialidades" onClick={() => setIsOpen(false)} className="py-3 px-4 rounded-xl text-lg font-semibold text-neutral-800 hover:bg-neutral-50 hover:text-blue-600 transition-colors">Especialidades</a>
+          <a href="#estrutura" onClick={() => setIsOpen(false)} className="py-3 px-4 rounded-xl text-lg font-semibold text-neutral-800 hover:bg-neutral-50 hover:text-blue-600 transition-colors">Estrutura</a>
+          <Link to="/blog" onClick={() => setIsOpen(false)} className="py-3 px-4 rounded-xl text-lg font-semibold text-neutral-800 hover:bg-neutral-50 hover:text-blue-600 transition-colors">Blog</Link>
           <a 
             href={`https://wa.me/${settings.whatsappNumber}`}
-            className="bg-blue-600 text-white px-6 py-3 rounded-xl font-bold flex items-center justify-center gap-2"
+            className="mt-2 bg-blue-600 text-white px-6 py-3.5 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-blue-700 transition-colors shadow-lg shadow-blue-200"
           >
             <Phone className="w-5 h-5" />
             Agendar Agora

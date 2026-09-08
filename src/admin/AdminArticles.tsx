@@ -60,9 +60,9 @@ export default function AdminArticles() {
 
   return (
     <div>
-      <div className="flex justify-between items-center mb-8">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-8">
         <div>
-          <h1 className="text-3xl font-bold text-neutral-900">Gerenciar Artigos</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold text-neutral-900">Gerenciar Artigos</h1>
           <p className="text-neutral-500 mt-1">Crie e edite conteúdos para o blog do hospital.</p>
         </div>
         <button 
@@ -70,13 +70,13 @@ export default function AdminArticles() {
             setCurrentArticle({ status: 'draft', category: 'Saúde' });
             setIsEditing(true);
           }}
-          className="bg-blue-600 text-white px-6 py-3 rounded-xl font-bold flex items-center gap-2 hover:bg-blue-700 transition-all shadow-lg shadow-blue-100"
+          className="bg-blue-600 text-white px-6 py-3 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-blue-700 transition-all shadow-lg shadow-blue-100 w-full sm:w-auto"
         >
           <Plus className="w-5 h-5" /> Novo Artigo
         </button>
       </div>
 
-      <div className="bg-white rounded-3xl border border-neutral-200 overflow-hidden">
+      <div className="bg-white rounded-3xl border border-neutral-200 overflow-hidden overflow-x-auto">
         <table className="w-full text-left border-collapse">
           <thead>
             <tr className="bg-neutral-50 border-b border-neutral-200 text-neutral-500 text-xs font-bold uppercase tracking-wider">
@@ -119,7 +119,7 @@ export default function AdminArticles() {
                 <td className="px-8 py-5 text-sm text-neutral-600 font-medium">{article.category}</td>
                 <td className="px-8 py-5 text-sm text-neutral-500">{formatDate(article.createdAt)}</td>
                 <td className="px-8 py-5 text-right">
-                  <div className="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div className="flex justify-end gap-2 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity">
                     <button 
                       onClick={() => {
                         setCurrentArticle(article);
@@ -145,10 +145,10 @@ export default function AdminArticles() {
 
       {/* Editor Modal */}
       {isEditing && (
-        <div className="fixed inset-0 z-50 bg-neutral-900/40 backdrop-blur-sm flex items-center justify-center p-6">
+        <div className="fixed inset-0 z-50 bg-neutral-900/40 backdrop-blur-sm flex items-center justify-center p-4 sm:p-6">
           <div className="bg-white w-full max-w-5xl max-h-[90vh] rounded-[32px] shadow-2xl flex flex-col overflow-hidden">
-            <header className="px-10 py-6 border-b border-neutral-100 flex justify-between items-center">
-              <h2 className="text-xl font-bold text-neutral-900">
+            <header className="px-6 sm:px-10 py-5 sm:py-6 border-b border-neutral-100 flex justify-between items-center">
+              <h2 className="text-lg sm:text-xl font-bold text-neutral-900">
                 {currentArticle?.id ? 'Editar Artigo' : 'Novo Artigo'}
               </h2>
               <button onClick={() => setIsEditing(false)} className="p-2 hover:bg-neutral-100 rounded-full">
@@ -156,7 +156,7 @@ export default function AdminArticles() {
               </button>
             </header>
 
-            <form onSubmit={handleSave} className="flex-1 overflow-y-auto p-10 space-y-8">
+            <form onSubmit={handleSave} className="flex-1 overflow-y-auto p-6 sm:p-10 space-y-8">
               <div className="grid lg:grid-cols-2 gap-8">
                 <div className="space-y-6">
                   <div>
@@ -246,17 +246,17 @@ export default function AdminArticles() {
                 />
               </div>
 
-              <footer className="pt-8 border-t border-neutral-100 flex justify-end gap-4">
+              <footer className="pt-8 border-t border-neutral-100 flex flex-col-reverse sm:flex-row sm:justify-end gap-3 sm:gap-4">
                 <button 
                   type="button"
                   onClick={() => setIsEditing(false)}
-                  className="px-8 py-3 rounded-xl font-bold text-neutral-500 hover:bg-neutral-50 transition-all"
+                  className="px-8 py-3 rounded-xl font-bold text-neutral-500 hover:bg-neutral-50 transition-all w-full sm:w-auto"
                 >
                   Cancelar
                 </button>
                 <button 
                   type="submit"
-                  className="bg-blue-600 text-white px-10 py-3 rounded-xl font-bold flex items-center gap-2 hover:bg-blue-700 transition-all shadow-xl shadow-blue-100"
+                  className="bg-blue-600 text-white px-10 py-3 rounded-xl font-bold flex items-center justify-center gap-2 hover:bg-blue-700 transition-all shadow-xl shadow-blue-100 w-full sm:w-auto"
                 >
                   <Save className="w-5 h-5" /> Salvar Artigo
                 </button>

@@ -56,7 +56,7 @@ export default function ArticlePage() {
   return (
     <div className="bg-white min-h-screen pb-20">
       {/* Header */}
-      <div className="relative h-[50vh] min-h-[400px] bg-neutral-900 overflow-hidden">
+      <div className="relative h-[45vh] min-h-[320px] sm:min-h-[420px] bg-neutral-900 overflow-hidden">
         {article.coverImage && (
           <img 
             src={article.coverImage} 
@@ -65,7 +65,7 @@ export default function ArticlePage() {
           />
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-neutral-900 via-neutral-900/40 to-transparent" />
-        <div className="absolute bottom-0 left-0 w-full p-8 lg:p-20">
+        <div className="absolute bottom-0 left-0 w-full p-6 sm:p-8 lg:p-20">
           <div className="max-w-4xl mx-auto">
             <Link to="/blog" className="inline-flex items-center gap-2 text-blue-400 font-bold mb-6 hover:text-blue-300 transition-colors">
               <ArrowLeft className="w-4 h-4" /> Blog
@@ -73,7 +73,7 @@ export default function ArticlePage() {
             <span className="block text-blue-400 font-bold uppercase tracking-widest text-xs mb-4">
               {article.category}
             </span>
-            <h1 className="text-4xl lg:text-6xl font-bold text-white leading-tight mb-6">
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-tight mb-6">
               {article.title}
             </h1>
             <div className="flex items-center gap-6 text-neutral-300 text-sm">
@@ -87,7 +87,7 @@ export default function ArticlePage() {
       </div>
 
       {/* Content */}
-      <div className="max-w-4xl mx-auto px-6 py-16">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
         <div className="prose prose-lg lg:prose-xl max-w-none prose-blue">
           <ReactMarkdown>{article.content}</ReactMarkdown>
         </div>

@@ -39,12 +39,12 @@ export default function ProfessionalCarousel() {
   const scrollNext = React.useCallback(() => emblaApi && emblaApi.scrollNext(), [emblaApi]);
 
   return (
-    <section className="py-24 bg-neutral-50 overflow-hidden">
+    <section className="py-16 sm:py-24 bg-neutral-50 overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+        <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 lg:mb-12 gap-6">
           <div>
             <span className="text-blue-600 font-bold tracking-widest text-sm uppercase">Corpo Clínico</span>
-            <h2 className="text-4xl font-bold text-neutral-900 mt-2">Nossos Especialistas</h2>
+            <h2 className="text-3xl sm:text-4xl font-bold text-neutral-900 mt-2">Nossos Especialistas</h2>
             <p className="text-neutral-600 mt-4 max-w-xl">
               Uma equipe multidisciplinar de excelência, unindo experiência acadêmica e cuidado humanizado.
             </p>
